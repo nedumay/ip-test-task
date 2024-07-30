@@ -43,6 +43,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ip_test_task.R
 import com.example.ip_test_task.domain.model.ProductInfo
 import com.example.ip_test_task.presentation.screens.ProductListViewModel
@@ -64,7 +66,9 @@ fun CardItemProduct(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(4.dp),
+            .padding(
+                horizontal = 4.dp, vertical = 16.dp
+            ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
@@ -323,3 +327,4 @@ fun CounterDialog(
         }
     )
 }
+

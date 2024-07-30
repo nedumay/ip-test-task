@@ -11,10 +11,14 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,6 +41,17 @@ fun ProductListScreen(
 
     val productInfo by viewModel.productInfo.collectAsState(initial = Resource.Loading)
     val textState = remember { mutableStateOf(TextFieldValue("")) }
+
+    val filteredProducts = remember { mutableStateListOf<ProductInfo>() }
+    var allProducts by remember { mutableStateOf(emptyList<ProductInfo>()) }
+
+    LaunchedEffect(textState.value) {
+        filterProducts(
+            textState = textState,
+            allProducts = allProducts,
+            filteredProducts = filteredProducts
+        )
+    }
     Scaffold(
         topBar = { TopAppBarProductList() }
     ) { innerPadding ->
@@ -44,24 +59,29 @@ fun ProductListScreen(
             modifier = Modifier
                 .padding(innerPadding)
         ) {
-            SearchView(
-                state = textState
-            )
             when (productInfo) {
                 is Resource.Loading -> {
                     LoadingIndicator()
                 }
                 is Resource.Success -> {
                     Log.d("dataDB", (productInfo as Resource.Success<List<ProductInfo>>).data.toString())
+                    allProducts = (productInfo as Resource.Success<List<ProductInfo>>).data
+                    filteredProducts.clear()
+                    filteredProducts.addAll(allProducts)
                     LazyColumn(
                         modifier = Modifier
                             .padding(8.dp),
 
                         ) {
-                        items((productInfo as Resource.Success<List<ProductInfo>>).data.size) {
+                        item{
+                            SearchView(
+                                state = textState
+                            )
+                        }
+                        items(filteredProducts.size) {
                             CardItemProduct(
                                 viewModel = viewModel,
-                                productItem = (productInfo as Resource.Success<List<ProductInfo>>).data[it]
+                                productItem = filteredProducts[it]
                             )
                         }
                     }
@@ -84,4 +104,17 @@ fun LoadingIndicator() {
 @Composable
 fun ErrorScreen() {
     Text(text = "Произошла ошибка")
+}
+
+// Фильтрация списка по тексту в поле поиска
+fun filterProducts(
+    textState: MutableState<TextFieldValue>,
+    allProducts: List<ProductInfo>,
+    filteredProducts: MutableList<ProductInfo>
+) {
+    val query = textState.value.text.lowercase()
+    filteredProducts.clear()
+    filteredProducts.addAll(allProducts.filter {
+        it.name.lowercase().contains(query)
+    })
 }
