@@ -8,7 +8,7 @@ data class ProductInfo(
     val name: String,
     val time: Int,
     val tags: String,
-    val amount: Int,
+    var amount: Int,
     var id: Int = UNDEFIEND_ID
 ) {
     companion object {

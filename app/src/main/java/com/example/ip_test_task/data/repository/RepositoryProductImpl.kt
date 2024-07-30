@@ -27,7 +27,6 @@ class RepositoryProductImpl @Inject constructor(
 
     override suspend fun getProductList(): List<ProductInfo> {
         val dbModel = productInfoDao.getAll()
-        Log.d("dataDB", dbModel.toString())
         return dbModel.map { mapper.mapDbModelToEntity(it) }
     }
 }

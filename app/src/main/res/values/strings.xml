@@ -4,4 +4,11 @@
     <string name="product_search">Product search</string>
     <string name="on_stock">On stock</string>
     <string name="date_of_addition">Date of addition</string>
+    <string name="delete_product">Deleting a product</string>
+    <string name="delete_product_info">Do you really want to delete the selected item?</string>
+    <string name="delete_yes">Yes</string>
+    <string name="delete_no">No</string>
+    <string name="count_product">Quantity of product</string>
+    <string name="cancel">Cancel</string>
+    <string name="accept">Accept</string>
 </resources>

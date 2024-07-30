@@ -6,6 +6,7 @@ import com.example.ip_test_task.common.Resource
 import com.example.ip_test_task.domain.model.ProductInfo
 import com.example.ip_test_task.domain.usecase.DeleteProductItemUseCase
 import com.example.ip_test_task.domain.usecase.GetProductListUseCase
+import com.example.ip_test_task.domain.usecase.UpdateProductItemUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class ProductListViewModel @Inject constructor(
     private val getProductListUseCase: GetProductListUseCase,
     private val deleteProductItemUseCase: DeleteProductItemUseCase,
-    private val updateProductItemUseCase: DeleteProductItemUseCase
+    private val updateProductItemUseCase: UpdateProductItemUseCase
 ) : ViewModel() {
 
     private val _productInfo = MutableStateFlow<Resource<List<ProductInfo>>>(Resource.Loading)
@@ -41,12 +42,16 @@ class ProductListViewModel @Inject constructor(
     fun deleteProductItem(productItem: ProductInfo) {
         viewModelScope.launch {
             deleteProductItemUseCase.invoke(productItem)
+            val data = getProductListUseCase.invoke()
+            _productInfo.value = Resource.Success(data)
         }
     }
 
     fun updateProductItem(productItem: ProductInfo) {
         viewModelScope.launch {
             updateProductItemUseCase.invoke(productItem)
+            val data = getProductListUseCase.invoke()
+            _productInfo.value = Resource.Success(data)
         }
     }
 }

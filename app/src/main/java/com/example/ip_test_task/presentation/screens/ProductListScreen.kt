@@ -1,7 +1,9 @@
 package com.example.ip_test_task.presentation.screens
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +27,7 @@ import com.example.ip_test_task.presentation.components.SearchView
 import com.example.ip_test_task.presentation.components.TopAppBarProductList
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -32,7 +35,7 @@ fun ProductListScreen(
     viewModel: ProductListViewModel = hiltViewModel()
 ) {
 
-    val productInfo by viewModel.productInfo.collectAsState()
+    val productInfo by viewModel.productInfo.collectAsState(initial = Resource.Loading)
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     Scaffold(
         topBar = { TopAppBarProductList() }
