@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ip-test-task</string>
+    <string name="top_app_bar_list_of_products">List of products</string>
+    <string name="product_search">Product search</string>
+    <string name="on_stock">On stock</string>
+    <string name="date_of_addition">Date of addition</string>
+</resources>
