@@ -28,7 +28,7 @@ fun TopAppBarProductList() {
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xFF7CECF5)
+            containerColor = Color(0xFFB1DCFC)
         )
     )
 }

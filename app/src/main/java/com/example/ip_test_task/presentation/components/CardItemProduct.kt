@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,7 +68,7 @@ fun CardItemProduct(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                horizontal = 4.dp, vertical = 16.dp
+                horizontal = 8.dp, vertical = 12.dp
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(8.dp)
@@ -87,11 +88,12 @@ fun CardItemProduct(
                     modifier = Modifier
                         .padding(
                             top = 16.dp,
-                            bottom = 16.dp,
+                            bottom = 8.dp,
                             start = 8.dp,
                         )
                         .weight(2f),
-                    fontSize = 18.sp
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
                 )
                 IconButton(
                     onClick = {
@@ -164,28 +166,30 @@ fun CardItemProduct(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(4.dp)
             ) {
                 Text(
                     modifier = Modifier
                         .weight(3f),
                     text = stringResource(id = R.string.on_stock),
                     color = Color.Black,
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
                     modifier = Modifier
                         .weight(2f),
                     text = stringResource(id = R.string.date_of_addition),
                     color = Color.Black,
+                    fontWeight = FontWeight.Bold
                 )
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        start = 8.dp,
-                        end = 8.dp,
-                        bottom = 8.dp
+                        start = 4.dp,
+                        end = 4.dp,
+                        bottom = 4.dp
                     )
             ) {
                 Text(

@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
@@ -20,6 +22,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,6 +49,8 @@ fun ProductListScreen(
     val filteredProducts = remember { mutableStateListOf<ProductInfo>() }
     var allProducts by remember { mutableStateOf(emptyList<ProductInfo>()) }
 
+    val focusManager = LocalFocusManager.current
+
     LaunchedEffect(textState.value) {
         filterProducts(
             textState = textState,
@@ -55,40 +61,51 @@ fun ProductListScreen(
     Scaffold(
         topBar = { TopAppBarProductList() }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-        ) {
-            when (productInfo) {
-                is Resource.Loading -> {
+        when (productInfo) {
+            is Resource.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = androidx.compose.ui.Alignment.Center
+                ) {
                     LoadingIndicator()
                 }
-                is Resource.Success -> {
-                    Log.d("dataDB", (productInfo as Resource.Success<List<ProductInfo>>).data.toString())
-                    allProducts = (productInfo as Resource.Success<List<ProductInfo>>).data
-                    filteredProducts.clear()
-                    filteredProducts.addAll(allProducts)
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(8.dp),
+            }
 
-                        ) {
-                        item{
-                            SearchView(
-                                state = textState
-                            )
-                        }
-                        items(filteredProducts.size) {
-                            CardItemProduct(
-                                viewModel = viewModel,
-                                productItem = filteredProducts[it]
-                            )
-                        }
+            is Resource.Success -> {
+                Log.d(
+                    "dataDB",
+                    (productInfo as Resource.Success<List<ProductInfo>>).data.toString()
+                )
+                allProducts = (productInfo as Resource.Success<List<ProductInfo>>).data
+                filteredProducts.clear()
+                filteredProducts.addAll(allProducts)
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .pointerInput(Unit) {
+                            // Обработка нажатия (click)
+                            detectTapGestures(onTap = {
+                                focusManager.clearFocus()
+                            })
+                        },
+                ) {
+                    item {
+                        SearchView(
+                            state = textState
+                        )
+                    }
+                    items(filteredProducts.size) {
+                        CardItemProduct(
+                            viewModel = viewModel,
+                            productItem = filteredProducts[it]
+                        )
                     }
                 }
-                is Resource.Error -> {
-                    Text(text = "Error")
-                }
+            }
+
+            is Resource.Error -> {
+                Text(text = "Error")
             }
         }
     }

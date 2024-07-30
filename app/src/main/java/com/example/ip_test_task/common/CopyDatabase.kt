@@ -5,6 +5,10 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
 
+/**
+ * @author Samim
+ * Функция для копирования базы данных
+ */
 fun copyDatabase(context: Context) {
     val dbFile = context.getDatabasePath("data.db")
     if (!dbFile.exists()) {

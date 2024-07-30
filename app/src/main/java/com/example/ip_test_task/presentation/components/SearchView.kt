@@ -1,8 +1,11 @@
 package com.example.ip_test_task.presentation.components
 
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -17,8 +20,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +32,11 @@ import com.example.ip_test_task.R
 
 @Composable
 fun SearchView(state: MutableState<TextFieldValue>) {
+
     val textStartState = stringResource(id = R.string.product_search)
+
+    val keyboard = LocalSoftwareKeyboardController.current
+
     OutlinedTextField(
         placeholder = {
             Text(
@@ -37,7 +46,7 @@ fun SearchView(state: MutableState<TextFieldValue>) {
         },
         value = state.value,
         label = {
-            if(state.value != TextFieldValue(textStartState)){
+            if (state.value != TextFieldValue(textStartState)) {
                 Text(
                     text = stringResource(id = R.string.product_search),
                     color = Color.Gray
@@ -80,8 +89,13 @@ fun SearchView(state: MutableState<TextFieldValue>) {
         },
         singleLine = true,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor= Color(0xFF0E0158), // цвет при получении фокуса
-            unfocusedBorderColor = Color(0xFFACA8A8)  // цвет при отсутствии фокуса
+            focusedBorderColor = Color(0xFF0E0158),
+            unfocusedBorderColor = Color(0xFFACA8A8)
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                keyboard?.hide()
+            }
         )
     )
 }
